@@ -169,7 +169,7 @@ def test_agent_command_invokes_command_agent(monkeypatch: pytest.MonkeyPatch, ti
 
     captured: dict[str, str] = {}
 
-    def _fake_run(*, settings, client, question):
+    def _fake_run(*, settings, question):
         captured["question"] = question
         return fake_result
 

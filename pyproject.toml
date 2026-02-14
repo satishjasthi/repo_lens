@@ -2,7 +2,7 @@
 name = "repo-lens"
 version = "0.1.0"
 description = "A powerful Git-aware repository assistant powered by LiteLLM and smolagents."
-authors = [{ name = "Satish Jasthi", email = "satish.jasthi@example.com" }]
+authors = [{ name = "Satish Jasthi" }]
 requires-python = ">=3.11"
 dependencies = [
   "typer[all]>=0.12",

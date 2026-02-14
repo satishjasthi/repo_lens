@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-from repo_agent.config import Settings
-from repo_agent.context_builder import gather_repo_context
+from repo_lens.config import Settings
+from repo_lens.context_builder import gather_repo_context
 
 if TYPE_CHECKING:  # pragma: no cover - typing aid
     from .conftest import RepoUnderTest
