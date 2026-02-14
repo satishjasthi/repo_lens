@@ -72,7 +72,11 @@ class Settings:
     llm_provider: str = field(default_factory=lambda: os.getenv("REPO_LENS_PROVIDER", "openai"))
     llm_model: str = field(default_factory=lambda: os.getenv("REPO_LENS_MODEL", "gpt-4o-mini"))
     llm_api_base: str | None = field(default_factory=lambda: os.getenv("REPO_LENS_API_BASE"))
-    llm_api_key: str | None = field(default_factory=lambda: os.getenv("REPO_LENS_API_KEY", os.getenv("OPENAI_API_KEY")))
+    llm_api_key: str | None = field(
+        default_factory=lambda: os.getenv("REPO_LENS_API_KEY") 
+        or os.getenv("OPENAI_API_KEY") 
+        or ("sk-dummy" if os.getenv("REPO_LENS_API_BASE") else None)
+    )
     
     request_timeout: float = field(
         default_factory=lambda: float(os.getenv("REPO_LENS_TIMEOUT", "60"))
