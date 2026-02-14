@@ -124,23 +124,24 @@ def agent(
 
     settings = _settings(ctx, repo)
     provider_label = _provider_label(settings)
-    console.print(Panel.fit("Planning Git commands...", title="repo-agent"))
+    console.print(Panel.fit(f"Running smolagent with {provider_label}...", title="repo-agent"))
 
-    with create_llm_client(settings) as client:
-        try:
-            result = run_command_agent(settings=settings, client=client, question=question)
-        except AgentError as exc:
-            console.print(Panel(str(exc), title="repo-agent", style="red"))
-            raise typer.Exit(1) from exc
+    try:
+        result = run_command_agent(settings=settings, question=question)
+    except AgentError as exc:
+        console.print(Panel(str(exc), title="repo-agent", style="red"))
+        raise typer.Exit(1) from exc
 
-    console.print(
-        Panel(
-            _format_plan(result.plan),
-            title="Planned Git commands",
-            expand=False,
+    if result.executions:
+        console.print(
+            Panel(
+                _format_plan(result.plan),
+                title="Executed Git commands",
+                expand=False,
+            )
         )
-    )
-    _print_command_outputs(result.executions)
+        _print_command_outputs(result.executions)
+    
     console.print(Panel(result.answer, title=provider_label, expand=False))
 
 

@@ -44,20 +44,39 @@ All commands—`ask`, `git status`, `git pull`, `shell`, etc.—respect the glob
 
 ## Configuration
 
-`repo-agent` is designed to be fully configurable via environment variables or a `.env` file. Configuration is resolving at runtime, meaning you can switch contexts (like changing the `.env` file or exporting new variables) without reinstalling the tool.
+`repo-agent` uses **LiteLLM** to support hundreds of LLM providers. It is fully configurable via environment variables or a `.env` file at runtime.
 
-**Precedence:**
-1.  Environment variables in the current shell session
-2.  Values from `.env` file in the current working directory
-3.  Default values
-
-### Common Settings
+### Core Settings
 
 ```ini
-REPO_AGENT_REPO=/path/to/repo       # Target repository path (defaults to current directory)
+REPO_AGENT_REPO=/path/to/repo       # Target repository path
 REPO_AGENT_COMMITS=10               # Number of commits to include in context
 REPO_AGENT_INCLUDE_DIFF=0           # Set to 1 to include unstaged/staged diffs
 REPO_AGENT_TIMEOUT=60               # HTTP request timeout in seconds
+```
+
+### LLM Provider Examples
+
+#### 1. OpenAI (Default)
+```ini
+REPO_AGENT_PROVIDER=openai          # Default
+REPO_AGENT_MODEL=gpt-4o-mini
+REPO_AGENT_API_KEY=sk-...           # Or use OPENAI_API_KEY
+```
+
+#### 2. Anthropic
+```ini
+REPO_AGENT_PROVIDER=anthropic
+REPO_AGENT_MODEL=claude-3-5-sonnet-20240620
+REPO_AGENT_API_KEY=sk-ant-...
+```
+
+#### 3. Local Models (LM Studio, Ollama, vLLM)
+For local servers, usually set the provider to `openai` and override the `API_BASE`.
+```ini
+REPO_AGENT_PROVIDER=openai
+REPO_AGENT_API_BASE=http://localhost:1234/v1
+REPO_AGENT_MODEL="qwen/qwen3-4b-thinking-2507"
 ```
 
 ### Custom Prompts
@@ -68,28 +87,6 @@ You can customize the agent's behavior by overriding its system prompts:
 REPO_AGENT_SYSTEM_PROMPT="You are a senior developer..."  # Main chat system prompt
 REPO_AGENT_PLAN_PROMPT="You are a git expert..."          # Planning agent prompt
 REPO_AGENT_ANSWER_PROMPT="You are a helpful assistant..." # Answer generation prompt
-```
-
-### OpenAI (Default Preference)
-
-If `OPENAI_API_KEY` is present, the CLI automatically prefers OpenAI.
-
-```ini
-REPO_AGENT_PROVIDER=openai          # Explicitly set provider
-OPENAI_API_KEY=sk-your-key          # Your OpenAI API key
-OPENAI_MODEL=gpt-4o-mini            # Model to use (default: gpt-4o-mini)
-OPENAI_API_BASE=https://api.openai.com/v1
-```
-
-### Nemotron / OpenAI-Compatible Servers
-
-Point the CLI at any OpenAI-compatible endpoint (like local LLMs via LM Studio, Ollama, or vLLM):
-
-```ini
-REPO_AGENT_PROVIDER=nemotron
-NEMOTRON_API_BASE=http://localhost:11434/v1
-NEMOTRON_MODEL=nemotron-mini
-NEMOTRON_API_KEY=                   # Optional for local setups
 ```
 
 ## Usage
@@ -115,7 +112,9 @@ repo-agent -r ~/code/tiny-music-player shell "pytest -q"
 
 ### Natural-language Git agent
 
-`repo-agent agent "..."` converts your prompt into a sequence of safe, read-only Git commands, executes them, and feeds the outputs back into the LLM before responding. The CLI automatically limits the command types (currently `log`, `show`, `rev-list`, `rev-parse`, `describe`, `status`, `shortlog`, `cat-file`, `diff`, `ls-tree`, `grep`, and `blame`) and shows every command/output block before presenting the final answer. This is especially helpful for questions like "Who created this repository?" or "What files changed in the initial commit?" where additional history inspection is required.
+`repo-agent agent "..."` converts your prompt into a sequence of safe, read-only Git commands, executes them, and feeds the outputs back into the LLM before responding. The CLI automatically limits the command types (currently `log`, `show`, `rev-list`, `rev-parse`, `describe`, `status`, `shortlog`, `cat-file`, `diff`, `ls-tree`, `grep`, and `blame`) and shows every command/output block before presenting the final answer.
+
+**Important:** Commands are executed directly, not via a shell. This means shell features like pipes (`|`), redirection (`>`), command substitution (`$(...)`), and environment variable expansion are **not** supported in the agent's plan.
 
 ### Example session
 

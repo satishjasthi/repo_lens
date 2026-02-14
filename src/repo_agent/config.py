@@ -43,7 +43,9 @@ DEFAULT_PLAN_SYSTEM_PROMPT = (
     "question. Choose from the subcommands: "
     + ", ".join(sorted(ALLOWED_SUBCOMMANDS))
     + ". Return STRICT JSON: {\"commands\": [{\"command\": \"git ...\", \"reason\": \"...\"}]} with at most "
-    f"{MAX_COMMANDS} entries. Never include shell operators, pipes, or redirection."
+    f"{MAX_COMMANDS} entries. "
+    "IMPORTANT: Commands are executed directly, NOT through a shell. "
+    "NEVER use shell operators (|, >, <), command substitution ($( ), ` `), or variable expansion ($VAR)."
 )
 
 DEFAULT_ANSWER_SYSTEM_PROMPT = (
