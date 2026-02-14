@@ -1,6 +1,6 @@
 [project]
 name = "repo-lens"
-version = "0.1.2"
+version = "0.1.3"
 description = "A powerful Git-aware repository assistant powered by LiteLLM and smolagents."
 authors = [{ name = "Satish Jasthi" }]
 readme = "README.md"

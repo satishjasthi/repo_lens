@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-from smolagents import CodeAgent, LiteLLMModel, Tool
+from smolagents import LiteLLMModel, Tool, ToolCallingAgent
 
 from .config import (
     ALLOWED_SUBCOMMANDS,
@@ -138,7 +138,7 @@ def run_command_agent(
     executions: list[CommandExecution] = []
     git_tool = GitTool(settings, executions)
     
-    agent = CodeAgent(
+    agent = ToolCallingAgent(
         tools=[git_tool],
         model=model,
         add_base_tools=False,

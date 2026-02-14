@@ -50,7 +50,7 @@ def test_git_tool_captures_failures(tiny_repo) -> None:
     assert executions[0].success is False
 
 
-@patch("repo_lens.command_agent.CodeAgent")
+@patch("repo_lens.command_agent.ToolCallingAgent")
 @patch("repo_lens.command_agent.LiteLLMModel")
 def test_run_command_agent_wraps_result(mock_model, mock_agent_class, tiny_repo) -> None:
     mock_agent = mock_agent_class.return_value
