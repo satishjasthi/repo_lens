@@ -2,17 +2,13 @@ from __future__ import annotations
 
 import pytest
 
-from repo_agent.command_agent import (
+from repo_lens.command_agent import (
     AgentRunResult,
     CommandExecution,
-    CommandPlanError,
     PlannedCommand,
-    execute_git_plan,
-    generate_final_answer,
-    plan_git_commands,
     run_command_agent,
 )
-from repo_agent.config import Settings
+from repo_lens.config import Settings
 
 
 class _StaticResponseClient:

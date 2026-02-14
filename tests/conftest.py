@@ -20,8 +20,8 @@ def _run(cmd: list[str], *, cwd: Path | None = None) -> None:
 
 
 def _configure_identity(repo_path: Path) -> None:
-    _run(["git", "config", "user.name", "Repo Agent Tests"], cwd=repo_path)
-    _run(["git", "config", "user.email", "repo-agent@example.com"], cwd=repo_path)
+    _run(["git", "config", "user.name", "Repo Lens Tests"], cwd=repo_path)
+    _run(["git", "config", "user.email", "repo-lens@example.com"], cwd=repo_path)
 
 
 @pytest.fixture(scope="session")

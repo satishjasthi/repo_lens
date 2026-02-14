@@ -56,7 +56,7 @@ DEFAULT_ANSWER_SYSTEM_PROMPT = (
 
 
 def _resolve_repo_path() -> Path:
-    repo_env = os.getenv("REPO_AGENT_REPO")
+    repo_env = os.getenv("REPO_LENS_REPO")
     if repo_env:
         return Path(repo_env).expanduser()
     return Path.cwd()
@@ -69,28 +69,28 @@ class Settings:
     # Generic LLM Configuration
     # provider can be "openai", "anthropic", "vertex_ai", "ollama", etc.
     # For local LLMs (LM Studio, etc.), usually use "openai" and set api_base.
-    llm_provider: str = field(default_factory=lambda: os.getenv("REPO_AGENT_PROVIDER", "openai"))
-    llm_model: str = field(default_factory=lambda: os.getenv("REPO_AGENT_MODEL", "gpt-4o-mini"))
-    llm_api_base: str | None = field(default_factory=lambda: os.getenv("REPO_AGENT_API_BASE"))
-    llm_api_key: str | None = field(default_factory=lambda: os.getenv("REPO_AGENT_API_KEY", os.getenv("OPENAI_API_KEY")))
+    llm_provider: str = field(default_factory=lambda: os.getenv("REPO_LENS_PROVIDER", "openai"))
+    llm_model: str = field(default_factory=lambda: os.getenv("REPO_LENS_MODEL", "gpt-4o-mini"))
+    llm_api_base: str | None = field(default_factory=lambda: os.getenv("REPO_LENS_API_BASE"))
+    llm_api_key: str | None = field(default_factory=lambda: os.getenv("REPO_LENS_API_KEY", os.getenv("OPENAI_API_KEY")))
     
     request_timeout: float = field(
-        default_factory=lambda: float(os.getenv("REPO_AGENT_TIMEOUT", "60"))
+        default_factory=lambda: float(os.getenv("REPO_LENS_TIMEOUT", "60"))
     )
     commit_history_limit: int = field(
-        default_factory=lambda: int(os.getenv("REPO_AGENT_COMMITS", "8"))
+        default_factory=lambda: int(os.getenv("REPO_LENS_COMMITS", "8"))
     )
     include_diff: bool = field(
-        default_factory=lambda: os.getenv("REPO_AGENT_INCLUDE_DIFF", "0") == "1"
+        default_factory=lambda: os.getenv("REPO_LENS_INCLUDE_DIFF", "0") == "1"
     )
     
     # Prompts
     system_prompt: str = field(
-        default_factory=lambda: os.getenv("REPO_AGENT_SYSTEM_PROMPT", DEFAULT_SYSTEM_PROMPT)
+        default_factory=lambda: os.getenv("REPO_LENS_SYSTEM_PROMPT", DEFAULT_SYSTEM_PROMPT)
     )
     plan_system_prompt: str = field(
-        default_factory=lambda: os.getenv("REPO_AGENT_PLAN_PROMPT", DEFAULT_PLAN_SYSTEM_PROMPT)
+        default_factory=lambda: os.getenv("REPO_LENS_PLAN_PROMPT", DEFAULT_PLAN_SYSTEM_PROMPT)
     )
     answer_system_prompt: str = field(
-        default_factory=lambda: os.getenv("REPO_AGENT_ANSWER_PROMPT", DEFAULT_ANSWER_SYSTEM_PROMPT)
+        default_factory=lambda: os.getenv("REPO_LENS_ANSWER_PROMPT", DEFAULT_ANSWER_SYSTEM_PROMPT)
     )

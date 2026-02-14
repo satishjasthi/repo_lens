@@ -1,8 +1,8 @@
 [project]
-name = "repo-agent"
+name = "repo-lens"
 version = "0.1.0"
-description = "CLI agent that combines Git insights with Nemotron SLM responses."
-authors = [{ name = "Your Name", email = "you@example.com" }]
+description = "A powerful Git-aware repository assistant powered by LiteLLM and smolagents."
+authors = [{ name = "Satish Jasthi", email = "satish.jasthi@example.com" }]
 requires-python = ">=3.11"
 dependencies = [
   "typer[all]>=0.12",
@@ -14,7 +14,7 @@ dependencies = [
 ]
 
 [project.scripts]
-repo-agent = "repo_agent.cli:app"
+repo-lens = "repo_lens.cli:app"
 
 [tool.uv]
 dev-dependencies = [

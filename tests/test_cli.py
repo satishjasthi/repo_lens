@@ -9,8 +9,8 @@ from typing import TYPE_CHECKING
 import pytest
 from typer.testing import CliRunner
 
-from repo_agent.cli import app
-from repo_agent.command_agent import AgentRunResult, CommandExecution, PlannedCommand
+from repo_lens.cli import app
+from repo_lens.command_agent import AgentRunResult, CommandExecution, PlannedCommand
 
 if TYPE_CHECKING:  # pragma: no cover - typing aid
     from .conftest import RepoUnderTest
@@ -31,8 +31,8 @@ def _git(args: list[str], *, cwd: Path) -> str:
 
 
 def _configure_identity(repo_path: Path) -> None:
-    _git(["config", "user.name", "Repo Agent Peer"], cwd=repo_path)
-    _git(["config", "user.email", "repo-agent-peer@example.com"], cwd=repo_path)
+    _git(["config", "user.name", "Repo Lens Peer"], cwd=repo_path)
+    _git(["config", "user.email", "repo-lens-peer@example.com"], cwd=repo_path)
 
 
 def test_git_status_command(tiny_repo: "RepoUnderTest") -> None:
@@ -65,7 +65,7 @@ def test_git_run_command(tiny_repo: "RepoUnderTest") -> None:
 
 
 def test_git_create_branch_command(tiny_repo: "RepoUnderTest") -> None:
-    branch_name = "feature/repo-agent-tests"
+    branch_name = "feature/repo-lens-tests"
     result = runner.invoke(
         app, ["git", "create-branch", branch_name, "--repo", str(tiny_repo.worktree)]
     )
@@ -133,7 +133,7 @@ def test_ask_command_uses_repo_context(monkeypatch: pytest.MonkeyPatch, tiny_rep
             captured["question"] = question
             return "Stubbed answer"
 
-    monkeypatch.setattr("repo_agent.cli.create_llm_client", lambda _settings: DummyClient())
+    monkeypatch.setattr("repo_lens.cli.create_llm_client", lambda _settings: DummyClient())
 
     result = runner.invoke(
         app,
@@ -173,7 +173,7 @@ def test_agent_command_invokes_command_agent(monkeypatch: pytest.MonkeyPatch, ti
         captured["question"] = question
         return fake_result
 
-    monkeypatch.setattr("repo_agent.cli.run_command_agent", _fake_run)
+    monkeypatch.setattr("repo_lens.cli.run_command_agent", _fake_run)
 
     result = runner.invoke(
         app,
@@ -194,7 +194,7 @@ def test_agent_command_invokes_command_agent(monkeypatch: pytest.MonkeyPatch, ti
 def test_git_checkout_command_switches_branches(tiny_repo: "RepoUnderTest") -> None:
     repo_path = tiny_repo.worktree
     starting_branch = _git(["rev-parse", "--abbrev-ref", "HEAD"], cwd=repo_path)
-    feature_branch = "feature/git-checkout"
+    feature_branch = "feature/repo-lens-tests"
 
     create_result = runner.invoke(
         app,
@@ -220,7 +220,7 @@ def test_top_level_repo_option_applies_to_git_commands(tiny_repo: "RepoUnderTest
 
 
 def test_repo_env_var_used_when_flag_missing(tiny_repo: "RepoUnderTest") -> None:
-    env = {**os.environ, "REPO_AGENT_REPO": str(tiny_repo.worktree)}
+    env = {**os.environ, "REPO_LENS_REPO": str(tiny_repo.worktree)}
     result = runner.invoke(app, ["git", "status"], env=env, catch_exceptions=False)
     assert result.exit_code == 0
     assert "## " in result.stdout

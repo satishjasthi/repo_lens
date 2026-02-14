@@ -15,7 +15,7 @@ from .context_builder import gather_repo_context
 from .git_utils import run_git
 from .llm_client import create_llm_client
 
-app = typer.Typer(help="Git-aware repository assistant for OpenAI and Nemotron")
+app = typer.Typer(help="Git-aware repository assistant powered by LiteLLM and smolagents")
 git_app = typer.Typer(help="Thin wrappers around git CLI")
 app.add_typer(git_app, name="git")
 console = Console()
@@ -57,7 +57,7 @@ def _repo_option() -> Path | None:
         "-r",
         help=(
             "Path to the Git repository. Defaults to the current working directory "
-            "or the value of $REPO_AGENT_REPO."
+            "or the value of $REPO_LENS_REPO."
         ),
         exists=True,
         file_okay=False,
@@ -104,7 +104,7 @@ def ask(
     console.print(
         Panel.fit(
             f"Context gathered. Querying {provider_label}...",
-            title="repo-agent",
+            title="repo-lens",
         )
     )
 
@@ -124,12 +124,12 @@ def agent(
 
     settings = _settings(ctx, repo)
     provider_label = _provider_label(settings)
-    console.print(Panel.fit(f"Running smolagent with {provider_label}...", title="repo-agent"))
+    console.print(Panel.fit(f"Running smolagent with {provider_label}...", title="repo-lens"))
 
     try:
         result = run_command_agent(settings=settings, question=question)
     except AgentError as exc:
-        console.print(Panel(str(exc), title="repo-agent", style="red"))
+        console.print(Panel(str(exc), title="repo-lens", style="red"))
         raise typer.Exit(1) from exc
 
     if result.executions:

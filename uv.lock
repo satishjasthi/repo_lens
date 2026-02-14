@@ -1482,7 +1482,7 @@ wheels = [
 ]
 
 [[package]]
-name = "repo-agent"
+name = "repo-lens"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
