@@ -1,8 +1,11 @@
 [project]
 name = "repo-lens"
-version = "0.1.0"
+version = "0.1.1"
 description = "A powerful Git-aware repository assistant powered by LiteLLM and smolagents."
 authors = [{ name = "Satish Jasthi" }]
+readme = "README.md"
+license = { text = "MIT" }
+keywords = ["git", "ai", "agent", "llm", "codebase", "smolagents"]
 requires-python = ">=3.11"
 dependencies = [
   "typer[all]>=0.12",
@@ -12,6 +15,11 @@ dependencies = [
   "litellm>=1.49.0",
   "smolagents",
 ]
+
+[project.urls]
+Homepage = "https://github.com/satishjasthi/repo_lens"
+Repository = "https://github.com/satishjasthi/repo_lens"
+Issues = "https://github.com/satishjasthi/repo_lens/issues"
 
 [project.scripts]
 repo-lens = "repo_lens.cli:app"
